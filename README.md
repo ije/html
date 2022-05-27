@@ -1,6 +1,6 @@
 # Htm
 
-Create a `text/html` response with JSX and [UnoCSS](https://github.com/unocss/unocss).
+Create a `text/html` response with JSX, powered by [Preact](https://preactjs.org) and [UnoCSS](https://github.com/unocss/unocss).
 
 ## Usage
 
