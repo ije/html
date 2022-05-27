@@ -1,10 +1,12 @@
 # Htm
 
-Create a `text/html` response with JSX and [Unocss](https://github.com/unocss/unocss).
+Create a `text/html` response with JSX and [UnoCSS](https://github.com/unocss/unocss).
+
+## Usage
+
+To use **Htm**, create a `server.tsx` file like this:
 
 ```tsx
-#!/usr/bin/env -S deno run --allow-net
-
 /** @jsx h  */
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm/mod.tsx";
@@ -23,3 +25,13 @@ serve((res) =>
   })
 );
 ```
+
+## Run the server
+
+```bash
+deno run --allow-net server.tsx
+```
+
+## Try it online
+
+https://dash.deno.com/playground/hello-world-jsx
