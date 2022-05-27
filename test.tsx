@@ -4,14 +4,18 @@
 /// <reference lib="deno.ns" />
 
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
-import { h, html, tw } from "./mod.tsx";
+import { h, html } from "./mod.tsx";
 
-serve(
-  (res) => {
-    return html({
-      title: "Hello world",
-      body: <p class={tw("text-green-500")}>Hello world</p>,
-    });
-  },
-  { port: 8000 },
+serve((res) =>
+  html({
+    title: "Hello World!",
+    meta: {
+      description: "This is a description.",
+    },
+    body: (
+      <div class="flex items-center justify-center w-screen h-screen">
+        <p class="text-5xl font-bold text-green-600">Hello World!</p>
+      </div>
+    ),
+  })
 );
