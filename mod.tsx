@@ -19,6 +19,7 @@ const publicUno = new UnoGenerator({
 const userUnos: Map<UserConfig, UnoGenerator> = new Map();
 
 export interface HtmlOptions {
+  lang?: string;
   title?: string;
   meta?: Record<string, string>;
   styles?: (string | { href: string; id?: string })[];
@@ -62,9 +63,9 @@ interface HtmlProps extends HtmlOptions {
   unocss: { css: string; version: string };
 }
 
-function Html({ title, meta, styles, scripts, body, unocss }: HtmlProps) {
+function Html({ lang, title, meta, styles, scripts, body, unocss }: HtmlProps) {
   return (
-    <html>
+    <html lang={lang ?? "en"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
