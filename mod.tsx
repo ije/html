@@ -23,7 +23,7 @@ export function configureUnoCSS(config: UserConfig) {
 export interface HtmlOptions {
   lang?: string;
   title?: string;
-  meta?: Record<string, string>;
+  meta?: Record<string, string | null | undefined>;
   styles?: (string | { href: string; id?: string })[];
   scripts?: (string | { src: string; type?: string; id?: string })[];
 }
@@ -66,7 +66,9 @@ function Html({ lang, title, meta, styles, scripts, body, unocss }: HtmlProps) {
         {title && <title>{title}</title>}
         {meta &&
           Object.entries(meta).filter(([name, content]) => !!name && !!content)
-            .map(([name, content]) => <meta name={name} content={content} />)}
+            .map(([name, content]) => (
+              <meta name={name} content={String(content)} />
+            ))}
         <style dangerouslySetInnerHTML={{ __html: resetCSS }} />
         {unocss.css && (
           <style
