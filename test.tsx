@@ -6,7 +6,7 @@
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "./mod.tsx";
 
-serve((res) =>
+serve((_res) =>
   html({
     title: "Hello World!",
     meta: {
