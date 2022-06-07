@@ -22,6 +22,7 @@ export function configureUnoCSS(config: UserConfig) {
 
 export interface HtmlOptions {
   lang?: string;
+  dark?: boolean;
   title?: string;
   meta?: Record<string, string | null | undefined>;
   links?: { [key: string]: string; href: string; rel: string }[];
@@ -58,11 +59,19 @@ interface HtmlProps extends HtmlOptions {
   unocss: { css: string; version: string };
 }
 
-function Html(
-  { lang, title, meta, links, styles, scripts, body, unocss }: HtmlProps,
-) {
+function Html({
+  lang,
+  dark,
+  title,
+  meta,
+  links,
+  styles,
+  scripts,
+  body,
+  unocss,
+}: HtmlProps) {
   return (
-    <html lang={lang ?? "en"}>
+    <html lang={lang ?? "en"} class={dark ? "dark" : undefined}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
