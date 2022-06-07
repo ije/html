@@ -24,6 +24,7 @@ export interface HtmlOptions {
   lang?: string;
   title?: string;
   meta?: Record<string, string | null | undefined>;
+  links?: { [key: string]: string; href: string; rel: string }[];
   styles?: (string | { href: string; id?: string })[];
   scripts?: (string | { src: string; type?: string; id?: string })[];
 }
@@ -57,7 +58,9 @@ interface HtmlProps extends HtmlOptions {
   unocss: { css: string; version: string };
 }
 
-function Html({ lang, title, meta, styles, scripts, body, unocss }: HtmlProps) {
+function Html(
+  { lang, title, meta, links, styles, scripts, body, unocss }: HtmlProps,
+) {
   return (
     <html lang={lang ?? "en"}>
       <head>
@@ -67,7 +70,9 @@ function Html({ lang, title, meta, styles, scripts, body, unocss }: HtmlProps) {
         {meta &&
           Object.entries(meta).filter(([name, content]) => !!name && !!content)
             .map(([name, content]) => (
-              <meta name={name} content={String(content)} />
+              name.startsWith("og:")
+                ? <meta property={name} content={String(content)} />
+                : <meta name={name} content={String(content)} />
             ))}
         <style dangerouslySetInnerHTML={{ __html: resetCSS }} />
         {unocss.css && (
@@ -76,6 +81,10 @@ function Html({ lang, title, meta, styles, scripts, body, unocss }: HtmlProps) {
             dangerouslySetInnerHTML={{ __html: unocss.css }}
           />
         )}
+        {links &&
+          links.map(({ rel, href, ...rest }) => (
+            <link rel={rel} href={href} {...rest} />
+          ))}
         {styles && styles.map((style) => (
           typeof style === "string"
             ? <style dangerouslySetInnerHTML={{ __html: style }} />
