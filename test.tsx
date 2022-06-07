@@ -25,6 +25,20 @@ serve((_res) =>
     body: (
       <div class="flex items-center justify-center w-screen h-screen">
         <p class="text-5xl font-bold text-green-600">Hello World!</p>
+        <span
+          class="inline-block mt-2 dark:hidden cursor-pointer"
+          /* @ts-ignore */
+          onclick="setColorScheme('dark')"
+        >
+          Dark Mode
+        </span>
+        <span
+          class="hidden mt-2 dark:inline-block cursor-pointer"
+          /* @ts-ignore */
+          onclick="setColorScheme('light')"
+        >
+          Light Mode
+        </span>
       </div>
     ),
   })
