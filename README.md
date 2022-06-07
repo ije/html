@@ -41,7 +41,7 @@ serve((res) =>
 
 ## Dark Mode
 
-_htm_ will automatically detect if the browser is in dark mode. or you can set
+**htm** will automatically detect if the browser is in dark mode. Or you can set
 it manually:
 
 ```js
@@ -51,7 +51,7 @@ html({
 });
 ```
 
-you also can set it in the client by call the `window.setColorScheme` function:
+You also can set the `color-scheme` in the client by calling the `window.setColorScheme` method:
 
 ```js
 html({
