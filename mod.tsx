@@ -43,6 +43,7 @@ export async function html(options: Options): Promise<Response> {
   const bodyHtml = renderToString(body);
   const { css } = await uno.generate(bodyHtml, { minify: true });
   return new Response(
+    `<!DOCTYPE html>` +
     renderToString(
       <Html
         body={bodyHtml}
