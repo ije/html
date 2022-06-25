@@ -65,6 +65,26 @@ html({
 });
 ```
 
+## Reset CSS
+
+**htm** by default will use a reset CSS file. You can disable it by passing `false` to the `useResetCSS` option:
+
+```js
+html({
+  reset: false,
+  ...
+});
+```
+
+You can also provide your own reset CSS:
+
+```js
+html({
+  reset: "* { margin: 0; padding: 0; }",
+  ...
+});
+```
+
 ## Run the server
 
 ```bash

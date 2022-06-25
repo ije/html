@@ -28,6 +28,7 @@ export interface HtmlOptions {
   links?: { [key: string]: string; href: string; rel: string }[];
   styles?: (string | { href: string; id?: string })[];
   scripts?: (string | { src: string; type?: string; id?: string })[];
+  reset?: boolean | string;
 }
 
 export interface Options extends HtmlOptions {
@@ -69,7 +70,9 @@ function Html({
   scripts,
   body,
   unocss,
+  reset,
 }: HtmlProps) {
+  const parsedResetCSS = typeof reset === "string" ? reset : reset === false ? undefined : resetCSS;
   return (
     <html lang={lang ?? "en"} class={dark ? "dark" : undefined}>
       <head>
@@ -83,7 +86,7 @@ function Html({
                 ? <meta property={name} content={String(content)} />
                 : <meta name={name} content={String(content)} />
             ))}
-        <style dangerouslySetInnerHTML={{ __html: resetCSS }} />
+        {parsedResetCSS && <style dangerouslySetInnerHTML={{ __html: parsedResetCSS }} />}
         {unocss.css && (
           <style
             data-unocss={unocss.version}
