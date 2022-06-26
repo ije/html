@@ -1,10 +1,5 @@
-/** @jsx h */
-
-import {
-  type Preset,
-  UnoGenerator,
-  type UserConfig,
-} from "https://esm.sh/@unocss/core@0.41.0";
+import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.41.0";
+import { UnoGenerator } from "https://esm.sh/@unocss/core@0.41.0";
 import presetWind from "https://esm.sh/@unocss/preset-wind@0.41.0?bundle&no-check";
 import type { Plugin } from "./mod.tsx";
 
