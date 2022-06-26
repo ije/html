@@ -7,10 +7,14 @@ Create a `text/html` response with JSX, powered by
 
 To use **Htm**, create a `server.tsx` file like this:
 
-```jsx
+```tsx
 /** @jsx h  */
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm/mod.tsx";
+import { UnoCSS } from "https://deno.land/x/htm/plugins.tsx";
+
+// enable UnoCSS
+html.use(UnoCSS())
 
 serve((res) =>
   html({
@@ -22,13 +26,8 @@ serve((res) =>
     links: [
       { rel: "mask-icon", href: "/logo.svg", color: "#ffffff" },
     ],
-    styles: [
-      "*{margin:0;padding:0}",
-      { href: "/style.css" },
-    ],
     scripts: [
-      "console.log('Hello World!')",
-      { src: "/script.js", type: "module" },
+      `console.log("Hello World!")`, 
     ],
     body: (
       <div class="flex items-center justify-center w-screen h-screen">
@@ -39,58 +38,58 @@ serve((res) =>
 );
 ```
 
-## Dark Mode
-
-**htm** will automatically detect if the browser is in dark mode. Or you can set
-it manually:
-
-```js
-html({
-  dark: true,
-  ...
-});
-```
-
-You also can set the `color-scheme` in the client by calling the `window.setColorScheme` method:
-
-```js
-html({
-  body: (
-    <div class="flex items-center justify-center w-screen h-screen">
-      <span class="dark:text-white" onclick="setColorScheme('dark')">
-        Dark Mode
-      </span>
-    </div>
-  ),
-});
-```
-
-## Reset CSS
-
-**htm** by default will use a reset CSS file. You can disable it by passing `false` to the `useResetCSS` option:
-
-```js
-html({
-  reset: false,
-  ...
-});
-```
-
-You can also provide your own reset CSS:
-
-```js
-html({
-  reset: "* { margin: 0; padding: 0; }",
-  ...
-});
-```
-
-## Run the server
+**Run the server**:
 
 ```bash
 deno run --allow-net server.tsx
 ```
 
-## Try it online
+**Try it online**:
 
 https://dash.deno.com/playground/hello-world-jsx
+
+## Color Scheme
+
+**Htm** supports [prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) out of the box:
+
+```tsx
+html({
+  colorScheme: "dark", // or "light" or "auto"
+  ...
+});
+```
+
+You call the `window.setColorScheme` helper function to set the color scheme in the browser when the `colorScheme` option is set to `auto`:
+
+```tsx
+html({
+  colorScheme: "auto",
+  body: (
+   <span class="dark:text-white" onclick="setColorScheme('dark')">
+      Dark Mode
+    </span>
+  ),
+});
+```
+
+## Plugins System
+
+**Htm** supports plugins system.
+
+```ts
+import { html } from "https://deno.land/x/htm/mod.tsx";
+import { UnoCSS } from "https://deno.land/x/htm/plugins.tsx";
+
+html.use(UnoCSS())
+```
+
+Write your own plugins:
+
+```ts
+import { html} from "https://deno.land/x/htm/mod.tsx";
+
+html.use(async (ctx) => {
+  // update ctx
+  ctx.scripts = [`console.log("Hello plugin")`, ...(ctx.scripts ?? [])];
+})
+```

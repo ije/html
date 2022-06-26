@@ -5,11 +5,15 @@
 
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "./mod.tsx";
+import { UnoCSS } from "./plugins.ts";
+
+html.use(UnoCSS());
 
 serve((_res) =>
   html({
     lang: "en",
     title: "Hello World!",
+    colorScheme: "auto",
     meta: {
       description: "This is a description.",
     },
@@ -23,7 +27,7 @@ serve((_res) =>
       "console.log('Hello World!')",
     ],
     body: (
-      <div class="flex items-center justify-center w-screen h-screen">
+      <div class="flex items-center flex-col justify-center w-screen h-screen">
         <p class="text-5xl font-bold text-green-600">Hello World!</p>
         <span
           class="inline-block mt-2 dark:hidden cursor-pointer"
