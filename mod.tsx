@@ -5,6 +5,8 @@ import {
   renderToString,
 } from "https://esm.sh/preact-render-to-string@5.2.0?deps=preact@10.8.2";
 
+const plugins: Plugin[] = [];
+
 export interface HtmlOptions {
   lang?: string;
   colorScheme?: "dark" | "light" | "auto";
@@ -30,8 +32,6 @@ export interface Options extends HtmlOptions {
   status?: number;
   headers?: HeadersInit;
 }
-
-const plugins: Plugin[] = [];
 
 export async function html(options: Options): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } = options;
@@ -128,8 +128,8 @@ function Html({
   );
 }
 
-html.use = (plugin: Plugin) => {
-  plugins.push(plugin);
+html.use = (...plugin: Plugin[]) => {
+  plugins.push(...plugin);
 };
 
 export * from "https://esm.sh/preact@10.7.2";
