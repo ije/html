@@ -14,7 +14,7 @@ import { h, html } from "https://deno.land/x/htm/mod.tsx";
 import { UnoCSS } from "https://deno.land/x/htm/plugins.ts";
 
 // enable UnoCSS
-html.use(UnoCSS())
+html.use(UnoCSS());
 
 serve((res) =>
   html({
@@ -27,7 +27,7 @@ serve((res) =>
       { rel: "mask-icon", href: "/logo.svg", color: "#ffffff" },
     ],
     scripts: [
-      `console.log("Hello World!")`, 
+      `console.log("Hello World!")`,
     ],
     body: (
       <div class="flex items-center justify-center w-screen h-screen">
@@ -50,46 +50,49 @@ https://dash.deno.com/playground/hello-world-jsx
 
 ## Color Scheme
 
-**Htm** supports [prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) out of the box:
+**Htm** supports
+[prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
+out of the box:
 
 ```tsx
 html({
-  colorScheme: "dark", // or "light" or "auto"
+  colorScheme: "dark", // or "light" or "auto", default "light"
   ...
 });
 ```
 
-You call the `window.setColorScheme` helper function to set the color scheme in the browser when the `colorScheme` option is set to `auto`:
+You call the `window.setColorScheme` helper function to set the color scheme in
+client when the `colorScheme` option is set to `auto`:
 
 ```tsx
 html({
   colorScheme: "auto",
   body: (
-   <span class="dark:text-white" onclick="setColorScheme('dark')">
+    <span class="dark:text-white" onclick="setColorScheme('dark')">
       Dark Mode
     </span>
   ),
 });
 ```
 
-## Plugins System
+## Plugin System
 
-**Htm** supports plugins system.
+**Htm** supports plugin system.
 
 ```ts
 import { html } from "https://deno.land/x/htm/mod.tsx";
 import { UnoCSS } from "https://deno.land/x/htm/plugins.ts";
 
-html.use(UnoCSS())
+html.use(UnoCSS());
 ```
 
-Write your own plugins:
+Create your own plugin:
 
 ```ts
-import { html} from "https://deno.land/x/htm/mod.tsx";
+import { html } from "https://deno.land/x/htm/mod.tsx";
 
-html.use(async (ctx) => {
+html.use((ctx) => {
   // update ctx
-  ctx.scripts = [`console.log("Hello plugin")`, ...(ctx.scripts ?? [])];
-})
+  ctx.scripts = [`console.log("Hello plugin!")`, ...(ctx.scripts ?? [])];
+});
 ```
