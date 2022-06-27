@@ -7,7 +7,12 @@ import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "./mod.tsx";
 import { UnoCSS } from "./plugins.ts";
 
-html.use(UnoCSS());
+html.use(
+  UnoCSS(),
+  (ctx) => {
+    ctx.scripts = [`console.log("Hello plugin!")`, ...(ctx.scripts ?? [])];
+  },
+);
 
 serve((_res) =>
   html({
