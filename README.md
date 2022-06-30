@@ -11,7 +11,7 @@ To use **Htm**, create a `server.tsx` file like this:
 /** @jsx h  */
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm/mod.tsx";
-import { UnoCSS } from "https://deno.land/x/htm/plugins.tsx";
+import { UnoCSS } from "https://deno.land/x/htm/plugins.ts";
 
 // enable UnoCSS
 html.use(UnoCSS())
