@@ -14,7 +14,13 @@ export interface HtmlOptions {
   meta?: Record<string, string | null | undefined>;
   links?: { [key: string]: string; href: string; rel: string }[];
   styles?: (string | { href: string; id?: string })[];
-  scripts?: (string | { src: string; type?: string; id?: string })[];
+  scripts?: (string | {
+    src: string;
+    type?: string;
+    id?: string;
+    async?: boolean;
+    defer?: boolean;
+  })[];
 }
 
 export interface PluginContext extends HtmlOptions {
@@ -102,7 +108,13 @@ function Html({
           typeof script === "string"
             ? <script dangerouslySetInnerHTML={{ __html: script }} />
             : (
-              <script src={script.src} type={script.type} id={script.id}>
+              <script
+                src={script.src}
+                type={script.type}
+                id={script.id}
+                async={script.async}
+                defer={script.defer}
+              >
               </script>
             )
         ))}
