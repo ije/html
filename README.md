@@ -9,9 +9,9 @@ To use **Htm**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h  */
-import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.160.0/http/server.ts";
 import { h, html } from "https://deno.land/x/htm/mod.tsx";
-import { UnoCSS } from "https://deno.land/x/htm/plugins.ts";
+import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
 
 // enable UnoCSS
 html.use(UnoCSS());
@@ -48,17 +48,42 @@ deno run --allow-net server.tsx
 
 https://dash.deno.com/playground/hello-world-jsx
 
-## Color Scheme
+## Plugin System
 
-**Htm** supports
-[prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
-out of the box:
+**Htm** supports plugin system. We provide `Unocss` and `ColorScheme` plugins
+offically:
+
+Use the **Unocss** plugin:
 
 ```tsx
+import { html } from "https://deno.land/x/htm/mod.tsx";
+import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
+
+// with default tailwind preset
+html.use(UnoCSS());
+
+// customize Unocss
+html.use(UnoCSS({
+  presets: [/* put your presets here. */],
+  // other unocss configurations check https://github.com/unocss/unocss#configurations
+}));
+
 html({
-  colorScheme: "dark", // or "light" or "auto", default "light"
-  ...
+  body: <div class="text-5xl font-bold text-green-600">Hello World!</div>,
 });
+```
+
+Use the **ColorScheme** plugin:
+
+```tsx
+import { html } from "https://deno.land/x/htm/mod.tsx";
+import ColorScheme from "https://deno.land/x/htm/plugins/color-scheme.ts";
+
+// check the color scheme with system settings automatically
+html.use(ColorScheme("auto"));
+
+// dark scheme
+html.use(ColorScheme("dark"));
 ```
 
 You call the `window.setColorScheme` helper function to set the color scheme in
@@ -66,7 +91,6 @@ client when the `colorScheme` option is set to `auto`:
 
 ```tsx
 html({
-  colorScheme: "auto",
   body: (
     <span class="dark:text-white" onclick="setColorScheme('dark')">
       Dark Mode
@@ -75,18 +99,7 @@ html({
 });
 ```
 
-## Plugin System
-
-**Htm** supports plugin system.
-
-```ts
-import { html } from "https://deno.land/x/htm/mod.tsx";
-import { UnoCSS } from "https://deno.land/x/htm/plugins.ts";
-
-html.use(UnoCSS());
-```
-
-Create your own plugin:
+Or **create** your own plugins:
 
 ```ts
 import { html } from "https://deno.land/x/htm/mod.tsx";
