@@ -1,6 +1,6 @@
-import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.41.0";
-import { UnoGenerator } from "https://esm.sh/@unocss/core@0.41.0";
-import presetWind from "https://esm.sh/@unocss/preset-wind@0.41.0?bundle&no-check";
+import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.45.30";
+import { UnoGenerator } from "https://esm.sh/@unocss/core@0.45.30";
+import presetWind from "https://esm.sh/@unocss/preset-wind@0.45.30?bundle&no-check";
 import type { Plugin } from "./mod.tsx";
 
 const defaultUnoConfig: UserConfig = {
