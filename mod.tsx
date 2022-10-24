@@ -9,7 +9,10 @@ const plugins: Plugin[] = [];
 
 export interface HtmlOptions {
   lang?: string;
-  colorScheme?: "dark" | "light" | "auto";
+  classes?: {
+    html?: string[];
+    body?: string[];
+  };
   title?: string;
   meta?: Record<string, string | null | undefined>;
   links?: { [key: string]: string; href: string; rel: string }[];
@@ -26,7 +29,7 @@ export interface HtmlOptions {
 export interface PluginContext extends HtmlOptions {
   body: string;
   status: number;
-  headers: HeadersInit;
+  headers: Headers;
 }
 
 export interface Plugin {
@@ -71,7 +74,7 @@ interface HtmlProps extends HtmlOptions {
 
 function Html({
   lang,
-  colorScheme,
+  classes,
   title,
   meta,
   links,
@@ -82,7 +85,7 @@ function Html({
   return (
     <html
       lang={lang ?? "en"}
-      class={colorScheme === "dark" ? "dark" : undefined}
+      class={classes?.html?.join(" ") || undefined}
     >
       <head>
         <meta charSet="utf-8" />
@@ -118,24 +121,11 @@ function Html({
               </script>
             )
         ))}
-        {(colorScheme === "auto" || colorScheme === "dark") && (
-          <style
-            dangerouslySetInnerHTML={{
-              __html:
-                `.dark{color-scheme:dark}.dark ::-moz-selection{background:#444}.dark ::selection{background:#444}`,
-            }}
-          />
-        )}
-        {colorScheme === "auto" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html:
-                `(()=>{let v=localStorage.getItem("color-scheme"),a=window.matchMedia("(prefers-color-scheme: dark)").matches,cl=document.documentElement.classList,setColorScheme=v=>(!v||v==="auto"?a:v==="dark")?cl.add("dark"):cl.remove("dark");setColorScheme(v);window.setColorScheme=v=>{setColorScheme(v);localStorage.setItem("color-scheme",v)};})();`,
-            }}
-          />
-        )}
       </head>
-      <body dangerouslySetInnerHTML={{ __html: body }} />
+      <body
+        class={classes?.body?.join(" ") || undefined}
+        dangerouslySetInnerHTML={{ __html: body }}
+      />
     </html>
   );
 }
@@ -144,4 +134,4 @@ html.use = (...plugin: Plugin[]) => {
   plugins.push(...plugin);
 };
 
-export * from "https://esm.sh/preact@10.7.2";
+export * from "https://esm.sh/preact@10.11.2";
