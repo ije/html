@@ -43,7 +43,7 @@ export interface Options extends HtmlOptions {
   headers?: HeadersInit;
 }
 
-export async function html(options: Options): Promise<Response> {
+export default async function html(options: Options): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } = options;
   const bodyHtml = typeof body === "string" ? body : renderToString(body);
   const headers = new Headers(headersInit);

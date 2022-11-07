@@ -1,10 +1,6 @@
 /**  @jsx h  */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 import { serve } from "https://deno.land/std@0.160.0/http/server.ts";
-import { h, html } from "./mod.tsx";
+import html, { h } from "./html.tsx";
 import UnoCSS from "./plugins/unocss.ts";
 import ColorScheme from "./plugins/color-scheme.ts";
 

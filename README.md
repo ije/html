@@ -1,16 +1,16 @@
-# Htm
+# Html
 
 Create a `text/html` response with JSX, powered by
-[Preact](https://preactjs.org) and [UnoCSS](https://github.com/unocss/unocss).
+[Preact](https://preactjs.org).
 
 ## Usage
 
-To use **Htm**, create a `server.tsx` file like this:
+To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h  */
 import { serve } from "https://deno.land/std@0.160.0/http/server.ts";
-import { h, html } from "https://deno.land/x/htm/mod.tsx";
+import html, { h } from "https://deno.land/x/htm/mod.ts";
 import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
 
 // enable UnoCSS
@@ -56,7 +56,7 @@ offically:
 Use the **Unocss** plugin:
 
 ```tsx
-import { html } from "https://deno.land/x/htm/mod.tsx";
+import html from "https://deno.land/x/htm/mod.ts";
 import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
 
 // with default tailwind preset
@@ -76,7 +76,7 @@ html({
 Use the **ColorScheme** plugin:
 
 ```tsx
-import { html } from "https://deno.land/x/htm/mod.tsx";
+import html from "https://deno.land/x/htm/mod.ts";
 import ColorScheme from "https://deno.land/x/htm/plugins/color-scheme.ts";
 
 // check the color scheme with system settings automatically
@@ -102,7 +102,7 @@ html({
 Or **create** your own plugins:
 
 ```ts
-import { html } from "https://deno.land/x/htm/mod.tsx";
+import html from "https://deno.land/x/htm/mod.ts";
 
 html.use((ctx) => {
   // update ctx

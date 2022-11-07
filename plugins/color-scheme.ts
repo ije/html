@@ -1,4 +1,4 @@
-import type { Plugin } from "../mod.tsx";
+import type { Plugin } from "../html.tsx";
 
 export default function ColorScheme(colorScheme: "dark" | "auto"): Plugin {
   return (ctx) => {
