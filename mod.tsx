@@ -16,9 +16,10 @@ export interface HtmlOptions {
   title?: string;
   meta?: Record<string, string | null | undefined>;
   links?: { [key: string]: string; href: string; rel: string }[];
-  styles?: (string | { href: string; id?: string })[];
+  styles?: (string | { href?: string; text?: string; id?: string })[];
   scripts?: (string | {
-    src: string;
+    src?: string;
+    text?: string;
     type?: string;
     id?: string;
     async?: boolean;
@@ -37,14 +38,14 @@ export interface Plugin {
 }
 
 export interface Options extends HtmlOptions {
-  body: VNode;
+  body: VNode | string;
   status?: number;
   headers?: HeadersInit;
 }
 
 export async function html(options: Options): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } = options;
-  const bodyHtml = renderToString(body);
+  const bodyHtml = typeof body === "string" ? body : renderToString(body);
   const headers = new Headers(headersInit);
   headers.append("Content-Type", "text/html; charset=utf-8");
   const context: PluginContext = {
@@ -105,20 +106,31 @@ function Html({
         {styles && styles.map((style) => (
           typeof style === "string"
             ? <style dangerouslySetInnerHTML={{ __html: style }} />
-            : <link rel="stylesheet" href={style.href} id={style.id} />
+            : (
+              <link
+                id={style.id}
+                rel="stylesheet"
+                href={style.href}
+                dangerouslySetInnerHTML={style.text
+                  ? { __html: style.text }
+                  : undefined}
+              />
+            )
         ))}
         {scripts && scripts.map((script) => (
           typeof script === "string"
             ? <script dangerouslySetInnerHTML={{ __html: script }} />
             : (
               <script
-                src={script.src}
-                type={script.type}
                 id={script.id}
+                type={script.type}
+                src={script.src}
                 async={script.async}
                 defer={script.defer}
-              >
-              </script>
+                dangerouslySetInnerHTML={script.text
+                  ? { __html: script.text }
+                  : undefined}
+              />
             )
         ))}
       </head>
