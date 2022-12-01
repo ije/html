@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { h, type VNode } from "https://esm.sh/preact@10.11.2";
+import { h, isValidElement, type VNode } from "https://esm.sh/preact@10.11.2";
 import {
   renderToString,
 } from "https://esm.sh/preact-render-to-string@5.2.6?deps=preact@10.11.2";
@@ -43,8 +43,13 @@ export interface Options extends HtmlOptions {
   headers?: HeadersInit;
 }
 
-export default async function html(options: Options): Promise<Response> {
-  const { body, status = 200, headers: headersInit, ...rest } = options;
+export default async function html(
+  options: Options | VNode | string,
+): Promise<Response> {
+  const { body, status = 200, headers: headersInit, ...rest } =
+    isValidElement(options) || typeof options === "string"
+      ? { body: options } as Options
+      : options;
   const bodyHtml = typeof body === "string" ? body : renderToString(body);
   const headers = new Headers(headersInit);
   headers.append("Content-Type", "text/html; charset=utf-8");
