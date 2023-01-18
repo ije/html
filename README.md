@@ -1,6 +1,6 @@
 # Html
 
-Create a `text/html` response with JSX, powered by
+Create `text/html` response with JSX, powered by
 [Preact](https://preactjs.org).
 
 ## Usage
