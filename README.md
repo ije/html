@@ -16,7 +16,7 @@ import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
 // enable UnoCSS
 html.use(UnoCSS());
 
-serve((res) =>
+serve((_req) =>
   html({
     lang: "en",
     title: "Hello World!",
