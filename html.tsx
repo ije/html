@@ -15,9 +15,9 @@ export interface HtmlOptions {
   };
   title?: string;
   meta?: Record<string, string | null | undefined>;
-  links?: { [key: string]: string; href: string; rel: string }[];
-  styles?: (string | { href?: string; text?: string; id?: string })[];
-  scripts?: (string | {
+  links?: (boolean | { [key: string]: string; href: string; rel: string })[];
+  styles?: (boolean | string | { href?: string; text?: string; id?: string })[];
+  scripts?: (boolean | string | {
     src?: string;
     text?: string;
     type?: string;
@@ -105,10 +105,10 @@ function Html({
                 : <meta name={name} content={String(content)} />
             ))}
         {links &&
-          links.map(({ rel, href, ...rest }) => (
+          links.filter(boolFilter).map(({ rel, href, ...rest }) => (
             <link rel={rel} href={href} {...rest} />
           ))}
-        {styles && styles.map((style) => (
+        {styles && styles.filter(boolFilter).map((style) => (
           typeof style === "string"
             ? <style dangerouslySetInnerHTML={{ __html: style }} />
             : (
@@ -122,7 +122,7 @@ function Html({
               />
             )
         ))}
-        {scripts && scripts.map((script) => (
+        {scripts && scripts.filter(boolFilter).map((script) => (
           typeof script === "string"
             ? <script dangerouslySetInnerHTML={{ __html: script }} />
             : (
@@ -145,6 +145,10 @@ function Html({
       />
     </html>
   );
+}
+
+function boolFilter<T>(value: T | boolean): value is T {
+  return Boolean(value);
 }
 
 html.use = (...plugin: Plugin[]) => {
