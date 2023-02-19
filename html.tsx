@@ -1,9 +1,9 @@
 /** @jsx h */
 
-import { h, isValidElement, type VNode } from "https://esm.sh/preact@10.11.2";
+import { h, isValidElement, type VNode } from "https://esm.sh/preact@10.12.1";
 import {
   renderToString,
-} from "https://esm.sh/preact-render-to-string@5.2.6?deps=preact@10.11.2";
+} from "https://esm.sh/preact-render-to-string@5.2.6?deps=preact@10.12.1";
 
 const plugins: Plugin[] = [];
 
