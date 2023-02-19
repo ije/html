@@ -1,6 +1,6 @@
-import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.46.3";
-import { UnoGenerator } from "https://esm.sh/@unocss/core@0.46.3";
-import presetWind from "https://esm.sh/@unocss/preset-wind@0.46.3?bundle&no-check";
+import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.49.7";
+import { UnoGenerator } from "https://esm.sh/@unocss/core@0.49.7";
+import presetWind from "https://esm.sh/@unocss/preset-wind@0.49.7?bundle&no-check";
 import type { Plugin } from "../html.tsx";
 
 const unoResetCSS = `/* reset */
