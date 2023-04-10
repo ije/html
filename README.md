@@ -1,7 +1,6 @@
 # Html
 
-Create `text/html` response with JSX, powered by
-[Preact](https://preactjs.org).
+Create `text/html` response with JSX.
 
 ## Usage
 
@@ -9,7 +8,7 @@ To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h  */
-import { serve } from "https://deno.land/std@0.160.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
 import html, { h } from "https://deno.land/x/htm/mod.ts";
 import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
 
@@ -50,7 +49,7 @@ https://dash.deno.com/playground/hello-world-jsx
 
 ## Plugin System
 
-**Htm** supports plugin system. We provide `Unocss` and `ColorScheme` plugins
+**Html** supports plugin system. We provide `Unocss` and `ColorScheme` plugins
 offically:
 
 Use the **Unocss** plugin:

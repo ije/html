@@ -1,5 +1,5 @@
 /**  @jsx h  */
-import { serve } from "https://deno.land/std@0.175.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
 import html, { h } from "./html.tsx";
 import UnoCSS from "./plugins/unocss.ts";
 import ColorScheme from "./plugins/color-scheme.ts";
@@ -34,14 +34,12 @@ serve((_res) =>
         <p class="text-5xl font-bold text-green-600">Hello World!</p>
         <span
           class="inline-block mt-2 dark:hidden cursor-pointer"
-          /* @ts-ignore */
           onclick="setColorScheme('dark')"
         >
           Dark Mode
         </span>
         <span
           class="hidden mt-2 dark:inline-block cursor-pointer"
-          /* @ts-ignore */
           onclick="setColorScheme('light')"
         >
           Light Mode

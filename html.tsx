@@ -1,9 +1,6 @@
 /** @jsx h */
 
-import { h, isValidElement, type VNode } from "https://esm.sh/preact@10.12.1";
-import {
-  renderToString,
-} from "https://esm.sh/preact-render-to-string@5.2.6?deps=preact@10.12.1";
+import { h, JSXNode } from "./jsx.ts";
 
 const plugins: Plugin[] = [];
 
@@ -38,19 +35,19 @@ export interface Plugin {
 }
 
 export interface Options extends HtmlOptions {
-  body: VNode | string;
+  body: JSXNode | string;
   status?: number;
   headers?: HeadersInit;
 }
 
 export default async function html(
-  options: Options | VNode | string,
+  options: Options | JSXNode | string,
 ): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } =
-    isValidElement(options) || typeof options === "string"
+    options instanceof JSXNode || typeof options === "string"
       ? { body: options } as Options
       : options;
-  const bodyHtml = typeof body === "string" ? body : renderToString(body);
+  const bodyHtml = typeof body === "string" ? body : body.toString();
   const headers = new Headers(headersInit);
   headers.append("Content-Type", "text/html; charset=utf-8");
   const context: PluginContext = {
@@ -62,11 +59,9 @@ export default async function html(
   for (const plugin of plugins) {
     await plugin(context);
   }
+  const root = <Html {...context} />;
   return new Response(
-    `<!DOCTYPE html>` +
-      renderToString(
-        <Html {...context} />,
-      ),
+    `<!DOCTYPE html>` + root.toString(),
     {
       status: context.status,
       headers: context.headers,
@@ -155,4 +150,4 @@ html.use = (...plugin: Plugin[]) => {
   plugins.push(...plugin);
 };
 
-export * from "https://esm.sh/preact@10.11.2";
+export { type FC, Fragment, h, JSXNode, memo } from "./jsx.ts";
