@@ -7,7 +7,7 @@ Create `text/html` response with JSX.
 To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
-/** @jsx h  */
+/** @jsx h */
 import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
 import html, { h } from "https://deno.land/x/htm/mod.ts";
 import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
@@ -67,9 +67,9 @@ html.use(UnoCSS({
   // other unocss configurations check https://github.com/unocss/unocss#configurations
 }));
 
-html({
-  body: <div class="text-5xl font-bold text-green-600">Hello World!</div>,
-});
+html(
+  <div class="text-5xl font-bold text-green-600">Hello World!</div>
+);
 ```
 
 Use the **ColorScheme** plugin:
@@ -89,13 +89,11 @@ You call the `window.setColorScheme` helper function to set the color scheme in
 client when the `colorScheme` option is set to `auto`:
 
 ```tsx
-html({
-  body: (
-    <span class="dark:text-white" onclick="setColorScheme('dark')">
-      Dark Mode
-    </span>
-  ),
-});
+html(
+  <span class="dark:text-white" onclick="setColorScheme('dark')">
+    Dark Mode
+  </span>
+);
 ```
 
 Or **create** your own plugins:

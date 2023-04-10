@@ -41,7 +41,7 @@ export interface Options extends HtmlOptions {
 }
 
 export default async function html(
-  options: Options | JSXNode | string,
+  options: JSXNode | string | Options,
 ): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } =
     options instanceof JSXNode || typeof options === "string"
