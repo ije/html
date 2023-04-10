@@ -9,8 +9,8 @@ To use **Html**, create a `server.tsx` file like this:
 ```tsx
 /** @jsx h */
 import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
-import html, { h } from "https://deno.land/x/htm/mod.ts";
-import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.0/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.0/plugins/unocss.ts";
 
 // enable UnoCSS
 html.use(UnoCSS());
@@ -49,14 +49,14 @@ https://dash.deno.com/playground/hello-world-jsx
 
 ## Plugin System
 
-**Html** supports plugin system. We provide `Unocss` and `ColorScheme` plugins
-offically:
+**Html** supports plugins system. We provide `Unocss` and `ColorScheme` plugins
+in the repository.
 
 Use the **Unocss** plugin:
 
 ```tsx
-import html from "https://deno.land/x/htm/mod.ts";
-import UnoCSS from "https://deno.land/x/htm/plugins/unocss.ts";
+import html from "https://deno.land/x/htm@0.2.0/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.0/plugins/unocss.ts";
 
 // with default tailwind preset
 html.use(UnoCSS());
@@ -68,15 +68,15 @@ html.use(UnoCSS({
 }));
 
 html(
-  <div class="text-5xl font-bold text-green-600">Hello World!</div>
+  <div class="text-5xl font-bold text-green-600">Hello World!</div>,
 );
 ```
 
 Use the **ColorScheme** plugin:
 
 ```tsx
-import html from "https://deno.land/x/htm/mod.ts";
-import ColorScheme from "https://deno.land/x/htm/plugins/color-scheme.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.0/mod.ts";
+import ColorScheme from "https://deno.land/x/htm@0.2.0/plugins/color-scheme.ts";
 
 // check the color scheme with system settings automatically
 html.use(ColorScheme("auto"));
@@ -92,14 +92,14 @@ client when the `colorScheme` option is set to `auto`:
 html(
   <span class="dark:text-white" onclick="setColorScheme('dark')">
     Dark Mode
-  </span>
+  </span>,
 );
 ```
 
 Or **create** your own plugins:
 
 ```ts
-import html from "https://deno.land/x/htm/mod.ts";
+import html from "https://deno.land/x/htm@0.2.0/mod.ts";
 
 html.use((ctx) => {
   // update ctx
