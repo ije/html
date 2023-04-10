@@ -55,6 +55,7 @@ in the repository.
 Use the **Unocss** plugin:
 
 ```tsx
+/** @jsx h */
 import html from "https://deno.land/x/htm@0.2.0/mod.ts";
 import UnoCSS from "https://deno.land/x/htm@0.2.0/plugins/unocss.ts";
 
@@ -75,6 +76,7 @@ html(
 Use the **ColorScheme** plugin:
 
 ```tsx
+/** @jsx h */
 import html, { h } from "https://deno.land/x/htm@0.2.0/mod.ts";
 import ColorScheme from "https://deno.land/x/htm@0.2.0/plugins/color-scheme.ts";
 
