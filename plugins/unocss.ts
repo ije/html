@@ -15,7 +15,14 @@ const defaultUnoConfig: UserConfig = {
 export default function UnoCSS(config = defaultUnoConfig): Plugin {
   const uno = new UnoGenerator(config);
   return async (ctx) => {
-    const { css } = await uno.generate(ctx.body);
+    let input = ctx.body;
+    if (ctx.classes?.html) {
+      input += `<html class="${ctx.classes.html.join(" ")}">`;
+    }
+    if (ctx.classes?.body) {
+      input += `<body class="${ctx.classes.body.join(" ")}">`;
+    }
+    const { css } = await uno.generate(input);
     ctx.styles = [unoResetCSS, css, ...(ctx.styles ?? [])];
   };
 }

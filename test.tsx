@@ -19,6 +19,9 @@ serve((_res) =>
     meta: {
       description: "This is a description.",
     },
+    classes: {
+      body: ["bg-gray-200", "dark:bg-gray-800"],
+    },
     links: [
       { rel: "mask-icon", href: "/logo.svg", color: "#ffffff" },
     ],
