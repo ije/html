@@ -1,6 +1,6 @@
 /**  @jsx h  */
 import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
-import html, { h } from "../html.tsx";
+import html, { h } from "../mod.ts";
 import UnoCSS from "../plugins/unocss.ts";
 import ColorScheme from "../plugins/color-scheme.ts";
 

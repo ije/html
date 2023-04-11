@@ -125,6 +125,26 @@ const escapeToBuffer = (str: string, buffer: StringBuffer): void => {
   buffer[0] += str.substring(lastIndex, index);
 };
 
+const shallowEqual = (a: Props, b: Props): boolean => {
+  if (a === b) {
+    return true;
+  }
+
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) {
+    return false;
+  }
+
+  for (let i = 0, len = aKeys.length; i < len; i++) {
+    if (a[aKeys[i]] !== b[aKeys[i]]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const childrenToStringToBuffer = (
   children: Child[],
   buffer: StringBuffer,
@@ -261,24 +281,10 @@ export const h = (
 
 export type FC<T = Props> = (props: T) => HtmlEscapedString;
 
-const shallowEqual = (a: Props, b: Props): boolean => {
-  if (a === b) {
-    return true;
-  }
-
-  const aKeys = Object.keys(a);
-  const bKeys = Object.keys(b);
-  if (aKeys.length !== bKeys.length) {
-    return false;
-  }
-
-  for (let i = 0, len = aKeys.length; i < len; i++) {
-    if (a[aKeys[i]] !== b[aKeys[i]]) {
-      return false;
-    }
-  }
-
-  return true;
+export const Fragment = (
+  props: { key?: string; children?: Child[] },
+): JSXNode => {
+  return new JSXFragmentNode("", {}, props.children || []);
 };
 
 export const memo = <T>(
@@ -295,10 +301,4 @@ export const memo = <T>(
     prevProps = props;
     return (computed ||= component(props));
   }) as FC<T>;
-};
-
-export const Fragment = (
-  props: { key?: string; children?: Child[] },
-): JSXNode => {
-  return new JSXFragmentNode("", {}, props.children || []);
 };

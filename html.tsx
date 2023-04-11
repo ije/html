@@ -41,12 +41,12 @@ export interface Options extends HtmlOptions {
 }
 
 export default async function html(
-  options: JSXNode | string | Options,
+  input: JSXNode | string | Options,
 ): Promise<Response> {
   const { body, status = 200, headers: headersInit, ...rest } =
-    options instanceof JSXNode || typeof options === "string"
-      ? { body: options } as Options
-      : options;
+    input instanceof JSXNode || typeof input === "string"
+      ? { body: input } as Options
+      : input;
   const bodyHtml = typeof body === "string" ? body : body.toString();
   const headers = new Headers(headersInit);
   headers.append("Content-Type", "text/html; charset=utf-8");
@@ -149,5 +149,3 @@ function boolFilter<T>(value: T | boolean): value is T {
 html.use = (...plugin: Plugin[]) => {
   plugins.push(...plugin);
 };
-
-export { type FC, Fragment, h, JSXNode, memo } from "./jsx.ts";
