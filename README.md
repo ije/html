@@ -9,8 +9,8 @@ To use **Html**, create a `server.tsx` file like this:
 ```tsx
 /** @jsx h */
 import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
-import html, { h } from "https://deno.land/x/htm@0.2.0/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.0/plugins/unocss.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.1/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.1/plugins/unocss.ts";
 
 // enable UnoCSS
 html.use(UnoCSS());
@@ -56,8 +56,8 @@ Use the **Unocss** plugin:
 
 ```tsx
 /** @jsx h */
-import html from "https://deno.land/x/htm@0.2.0/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.0/plugins/unocss.ts";
+import html from "https://deno.land/x/htm@0.2.1/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.1/plugins/unocss.ts";
 
 // with default tailwind preset
 html.use(UnoCSS());
@@ -77,8 +77,8 @@ Use the **ColorScheme** plugin:
 
 ```tsx
 /** @jsx h */
-import html, { h } from "https://deno.land/x/htm@0.2.0/mod.ts";
-import ColorScheme from "https://deno.land/x/htm@0.2.0/plugins/color-scheme.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.1/mod.ts";
+import ColorScheme from "https://deno.land/x/htm@0.2.1/plugins/color-scheme.ts";
 
 // check the color scheme with system settings automatically
 html.use(ColorScheme("auto"));
@@ -101,7 +101,7 @@ html(
 Or **create** your own plugins:
 
 ```ts
-import html from "https://deno.land/x/htm@0.2.0/mod.ts";
+import html from "https://deno.land/x/htm@0.2.1/mod.ts";
 
 html.use((ctx) => {
   // update ctx
