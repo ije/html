@@ -2,7 +2,7 @@
 
 import { h, JSXNode } from "./jsx.ts";
 
-const plugins: Plugin[] = [];
+const sharedPlugins: Plugin[] = [];
 
 export interface HtmlOptions {
   lang?: string;
@@ -22,9 +22,10 @@ export interface HtmlOptions {
     async?: boolean;
     defer?: boolean;
   })[];
+  plugins?: Plugin[];
 }
 
-export interface PluginContext extends HtmlOptions {
+export interface PluginContext extends Omit<HtmlOptions, "plugins"> {
   body: string;
   status: number;
   headers: Headers;
@@ -43,7 +44,7 @@ export interface Options extends HtmlOptions {
 export default async function html(
   input: JSXNode | string | Options,
 ): Promise<Response> {
-  const { body, status = 200, headers: headersInit, ...rest } =
+  const { body, status = 200, headers: headersInit, plugins, ...rest } =
     input instanceof JSXNode || typeof input === "string"
       ? { body: input } as Options
       : input;
@@ -56,8 +57,13 @@ export default async function html(
     status,
     headers,
   };
-  for (const plugin of plugins) {
+  for (const plugin of sharedPlugins) {
     await plugin(context);
+  }
+  if (plugins) {
+    for (const plugin of plugins) {
+      await plugin(context);
+    }
   }
   const root = <Html {...context} />;
   return new Response(
@@ -147,5 +153,5 @@ function boolFilter<T>(value: T | boolean): value is T {
 }
 
 html.use = (...plugin: Plugin[]) => {
-  plugins.push(...plugin);
+  sharedPlugins.push(...plugin);
 };
