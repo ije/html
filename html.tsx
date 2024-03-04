@@ -80,7 +80,7 @@ export default async function html(
   }
   if (plugins) {
     for (const plugin of plugins) {
-      if (!html.plugins.includes(plugin))  {
+      if (!html.plugins.includes(plugin)) {
         await plugin(context);
       }
     }
@@ -97,7 +97,7 @@ export default async function html(
 
 export type HtmlProps = Omit<PluginContext, "status" | "headers">;
 
-export function Html(props: HtmlProps) {
+export function Html(props: HtmlProps): JSX.Element {
   const {
     lang,
     title,

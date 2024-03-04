@@ -8,8 +8,8 @@ To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h */
-import html, { h } from "https://deno.land/x/htm@0.2.1/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.1/plugins/unocss.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.2/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.2/plugins/unocss.ts";
 
 // enable UnoCSS
 html.use(UnoCSS());
@@ -36,6 +36,10 @@ Deno.serve((_req) =>
 );
 ```
 
+> **Support JSR**: JSX and TSX files are currently not supported in JSR we are
+> planning to publish the module to JSR once it supports JSX and TSX. Follow
+> https://github.com/jsr-io/jsr/issues/24
+
 **Run the server**:
 
 ```bash
@@ -52,11 +56,11 @@ https://dash.deno.com/playground/hello-world-jsx
 rendering process and modify the context.
 
 ```ts
-import html from "https://deno.land/x/htm@0.2.1/mod.ts";
+import html from "https://deno.land/x/htm@0.2.2/mod.ts";
 
 // add a script to the context
 html.use((ctx) => {
-  ctx.scripts.push(`console.log("Hello plugin!")`)
+  ctx.scripts.push(`console.log("Hello plugin!")`);
 });
 ```
 
@@ -65,8 +69,8 @@ example, ise the **Unocss** plugin:
 
 ```tsx
 /** @jsx h */
-import html from "https://deno.land/x/htm@0.2.1/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.1/plugins/unocss.ts";
+import html from "https://deno.land/x/htm@0.2.2/mod.ts";
+import UnoCSS from "https://deno.land/x/htm@0.2.2/plugins/unocss.ts";
 
 // with default tailwind preset
 html.use(UnoCSS());
@@ -86,8 +90,8 @@ Use the **ColorScheme** plugin:
 
 ```tsx
 /** @jsx h */
-import html, { h } from "https://deno.land/x/htm@0.2.1/mod.ts";
-import ColorScheme from "https://deno.land/x/htm@0.2.1/plugins/color-scheme.ts";
+import html, { h } from "https://deno.land/x/htm@0.2.2/mod.ts";
+import ColorScheme from "https://deno.land/x/htm@0.2.2/plugins/color-scheme.ts";
 
 // check the color scheme with system settings automatically
 html.use(ColorScheme("auto"));
