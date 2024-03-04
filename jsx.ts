@@ -228,12 +228,11 @@ export class JSXNode implements HtmlEscaped {
       }
     }
 
+    buffer[0] += ">";
+
     if (emptyTags.includes(tag as string)) {
-      buffer[0] += "/>";
       return;
     }
-
-    buffer[0] += ">";
 
     childrenToStringToBuffer(children, buffer);
 
