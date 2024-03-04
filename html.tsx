@@ -1,17 +1,11 @@
 /** @jsx h */
-
 import { h, JSXNode } from "./jsx.ts";
-
-const sharedPlugins: Plugin[] = [];
 
 export interface HtmlOptions {
   lang?: string;
-  classes?: {
-    html?: string[];
-    body?: string[];
-  };
+  classes?: { html?: (string | boolean)[]; body?: (string | boolean)[] };
   title?: string;
-  meta?: Record<string, string | null | undefined>;
+  meta?: Record<string, boolean | string | null | undefined>;
   links?: (boolean | { [key: string]: string; href: string; rel: string })[];
   styles?: (boolean | string | { href?: string; text?: string; id?: string })[];
   scripts?: (boolean | string | {
@@ -25,7 +19,12 @@ export interface HtmlOptions {
   plugins?: Plugin[];
 }
 
-export interface PluginContext extends Omit<HtmlOptions, "plugins"> {
+export interface PluginContext
+  extends
+    Omit<Required<HtmlOptions>, "plugins" | "classes" | "lang" | "title"> {
+  lang?: string;
+  title?: string;
+  classes: { html: (string | boolean)[]; body: (string | boolean)[] };
   body: string;
   status: number;
   headers: Headers;
@@ -35,34 +34,55 @@ export interface Plugin {
   (props: PluginContext): void | Promise<void>;
 }
 
-export interface Options extends HtmlOptions {
+export interface RenderOptions extends HtmlOptions {
   body: JSXNode | string;
   status?: number;
   headers?: HeadersInit;
 }
 
 export default async function html(
-  input: JSXNode | string | Options,
+  input: JSXNode | string | RenderOptions,
 ): Promise<Response> {
-  const { body, status = 200, headers: headersInit, plugins, ...rest } =
-    input instanceof JSXNode || typeof input === "string"
-      ? { body: input } as Options
-      : input;
+  const {
+    classes = {},
+    meta = {},
+    links = [],
+    styles = [],
+    scripts = [],
+    body,
+    status = 200,
+    headers: headersInit,
+    plugins,
+    ...rest
+  } = input instanceof JSXNode || typeof input === "string"
+    ? { body: input } as RenderOptions
+    : input;
+  const { html: htmlClasses = [], body: bodyClasses = [] } = classes;
   const bodyHtml = typeof body === "string" ? body : body.toString();
   const headers = new Headers(headersInit);
   headers.append("Content-Type", "text/html; charset=utf-8");
   const context: PluginContext = {
     ...rest,
+    classes: {
+      html: htmlClasses,
+      body: bodyClasses,
+    },
+    meta,
+    links,
+    styles,
+    scripts,
     body: bodyHtml,
     status,
     headers,
   };
-  for (const plugin of sharedPlugins) {
+  for (const plugin of html.plugins) {
     await plugin(context);
   }
   if (plugins) {
     for (const plugin of plugins) {
-      await plugin(context);
+      if (!html.plugins.includes(plugin))  {
+        await plugin(context);
+      }
     }
   }
   const root = <Html {...context} />;
@@ -75,41 +95,37 @@ export default async function html(
   );
 }
 
-interface HtmlProps extends HtmlOptions {
-  body: string;
-}
+export type HtmlProps = Omit<PluginContext, "status" | "headers">;
 
-function Html({
-  lang,
-  classes,
-  title,
-  meta,
-  links,
-  styles,
-  scripts,
-  body,
-}: HtmlProps) {
+export function Html(props: HtmlProps) {
+  const {
+    lang,
+    title,
+    classes,
+    meta,
+    links,
+    styles,
+    scripts,
+    body,
+  } = props;
   return (
     <html
       lang={lang ?? "en"}
-      class={classes?.html?.join(" ") || undefined}
+      class={classes.html.filter(Boolean).join(" ") || undefined}
     >
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {title && <title>{title}</title>}
-        {meta &&
-          Object.entries(meta).filter(([name, content]) => !!name && !!content)
-            .map(([name, content]) => (
-              name.startsWith("og:")
-                ? <meta property={name} content={String(content)} />
-                : <meta name={name} content={String(content)} />
-            ))}
-        {links &&
-          links.filter(boolFilter).map(({ rel, href, ...rest }) => (
-            <link rel={rel} href={href} {...rest} />
+        {Object.entries(meta).filter(([name, content]) => !!name && !!content)
+          .map(([name, content]) => (
+            name.startsWith("og:")
+              ? <meta property={name} content={String(content)} />
+              : <meta name={name} content={String(content)} />
           ))}
-        {styles && styles.filter(boolFilter).map((style) => (
+        {links.filter(boolFilter).map(({ rel, href, ...rest }) => (
+          <link rel={rel} href={href} {...rest} />
+        ))}
+        {styles.filter(boolFilter).map((style) => (
           typeof style === "string"
             ? <style dangerouslySetInnerHTML={{ __html: style }} />
             : (
@@ -123,7 +139,7 @@ function Html({
               />
             )
         ))}
-        {scripts && scripts.filter(boolFilter).map((script) => (
+        {scripts.filter(boolFilter).map((script) => (
           typeof script === "string"
             ? <script dangerouslySetInnerHTML={{ __html: script }} />
             : (
@@ -141,7 +157,7 @@ function Html({
         ))}
       </head>
       <body
-        class={classes?.body?.join(" ") || undefined}
+        class={classes.body.filter(Boolean).join(" ") || undefined}
         dangerouslySetInnerHTML={{ __html: body }}
       />
     </html>
@@ -152,6 +168,7 @@ function boolFilter<T>(value: T | boolean): value is T {
   return Boolean(value);
 }
 
+html.plugins = [] as Plugin[];
 html.use = (...plugin: Plugin[]) => {
-  sharedPlugins.push(...plugin);
+  html.plugins.push(...plugin);
 };

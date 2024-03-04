@@ -8,14 +8,13 @@ To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h */
-import { serve } from "https://deno.land/std@0.180.0/http/server.ts";
 import html, { h } from "https://deno.land/x/htm@0.2.1/mod.ts";
 import UnoCSS from "https://deno.land/x/htm@0.2.1/plugins/unocss.ts";
 
 // enable UnoCSS
 html.use(UnoCSS());
 
-serve((_req) =>
+Deno.serve((_req) =>
   html({
     lang: "en",
     title: "Hello World!",
@@ -47,12 +46,22 @@ deno run --allow-net server.tsx
 
 https://dash.deno.com/playground/hello-world-jsx
 
-## Plugin System
+## Using Plugin
 
-**Html** supports plugins system. We provide `Unocss` and `ColorScheme` plugins
-in the repository.
+**Html** implements a simple plugin system that allows you to hook into the
+rendering process and modify the context.
 
-Use the **Unocss** plugin:
+```ts
+import html from "https://deno.land/x/htm@0.2.1/mod.ts";
+
+// add a script to the context
+html.use((ctx) => {
+  ctx.scripts.push(`console.log("Hello plugin!")`)
+});
+```
+
+We also provide `Unocss` and `ColorScheme` plugins in the repository. For
+example, ise the **Unocss** plugin:
 
 ```tsx
 /** @jsx h */
@@ -87,8 +96,8 @@ html.use(ColorScheme("auto"));
 html.use(ColorScheme("dark"));
 ```
 
-You call the `window.setColorScheme` helper function to set the color scheme in
-client when the `colorScheme` option is set to `auto`:
+You can call the `window.setColorScheme` helper function to set the color scheme
+in client when the `colorScheme` option is set to `auto`:
 
 ```tsx
 html(
@@ -96,15 +105,4 @@ html(
     Dark Mode
   </span>,
 );
-```
-
-Or **create** your own plugins:
-
-```ts
-import html from "https://deno.land/x/htm@0.2.1/mod.ts";
-
-html.use((ctx) => {
-  // update ctx
-  ctx.scripts = [`console.log("Hello plugin!")`, ...(ctx.scripts ?? [])];
-});
 ```

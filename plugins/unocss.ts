@@ -23,6 +23,6 @@ export default function UnoCSS(config = defaultUnoConfig): Plugin {
       input += `<body class="${ctx.classes.body.join(" ")}">`;
     }
     const { css } = await uno.generate(input);
-    ctx.styles = [unoResetCSS, css, ...(ctx.styles ?? [])];
+    ctx.styles.push(unoResetCSS, css)
   };
 }
