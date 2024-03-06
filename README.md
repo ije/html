@@ -9,10 +9,6 @@ To use **Html**, create a `server.tsx` file like this:
 ```tsx
 /** @jsx h */
 import html, { h } from "https://deno.land/x/htm@0.2.2/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.2/plugins/unocss.ts";
-
-// enable UnoCSS
-html.use(UnoCSS());
 
 Deno.serve((_req) =>
   html({
@@ -24,21 +20,20 @@ Deno.serve((_req) =>
     links: [
       { rel: "mask-icon", href: "/logo.svg", color: "#ffffff" },
     ],
+    styles: [
+      `div { display: flex; }`,
+    ],
     scripts: [
       `console.log("Hello World!")`,
     ],
     body: (
-      <div class="flex items-center justify-center w-screen h-screen">
-        <p class="text-5xl font-bold text-green-600">Hello World!</p>
+      <div>
+        <h1>Hello World!</h1>
       </div>
     ),
   })
 );
 ```
-
-> **Support JSR**: JSX and TSX files are currently not supported in JSR we are
-> planning to publish the module to JSR once it supports JSX and TSX. Follow
-> https://github.com/jsr-io/jsr/issues/24
 
 **Run the server**:
 
@@ -64,8 +59,8 @@ html.use((ctx) => {
 });
 ```
 
-We also provide `Unocss` and `ColorScheme` plugins in the repository. For
-example, ise the **Unocss** plugin:
+We provide `Unocss` and `ColorScheme` plugins in the repository. For example,
+use the **Unocss** plugin:
 
 ```tsx
 /** @jsx h */
@@ -105,8 +100,8 @@ in client when the `colorScheme` option is set to `auto`:
 
 ```tsx
 html(
-  <span class="dark:text-white" onclick="setColorScheme('dark')">
+  <button class="dark:text-white" onclick="setColorScheme('dark')">
     Dark Mode
-  </span>,
+  </button>,
 );
 ```
