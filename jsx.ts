@@ -22,13 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-// deno-lint-ignore no-explicit-any
-type Props = Record<string, any>;
 type Child = string | number | JSXNode | Child[];
+
+type Props = {
+  // deno-lint-ignore no-explicit-any
+  [key: string]: any;
+  class?: string;
+  style?: string;
+  dangerouslySetInnerHTML?: { __html: string };
+  onclick?: string;
+};
 
 declare global {
   namespace JSX {
-    type Element = HtmlEscapedString;
+    type Element =
+      | JSXFunctionNode
+      | JSXNode
+      | JSXFragmentNode;
     interface IntrinsicElements {
       [tagName: string]: Props;
     }
@@ -81,15 +91,12 @@ const booleanAttributes = [
   "selected",
 ];
 
-type HtmlEscaped = { isEscaped: true };
-type HtmlEscapedString = string & HtmlEscaped;
-type StringBuffer = [string];
 
 const escapeRegexp = /[&<>"]/;
 
 // The `escapeToBuffer` implementation is based on code from the MIT licensed `react-dom` package.
 // https://github.com/facebook/react/blob/main/packages/react-dom/src/server/escapeTextForBrowser.js
-const escapeToBuffer = (str: string, buffer: StringBuffer): void => {
+const escapeToBuffer = (str: string, buffer: string[]): void => {
   const match = str.search(escapeRegexp);
   if (match === -1) {
     buffer[0] += str;
@@ -125,29 +132,9 @@ const escapeToBuffer = (str: string, buffer: StringBuffer): void => {
   buffer[0] += str.substring(lastIndex, index);
 };
 
-const shallowEqual = (a: Props, b: Props): boolean => {
-  if (a === b) {
-    return true;
-  }
-
-  const aKeys = Object.keys(a);
-  const bKeys = Object.keys(b);
-  if (aKeys.length !== bKeys.length) {
-    return false;
-  }
-
-  for (let i = 0, len = aKeys.length; i < len; i++) {
-    if (a[aKeys[i]] !== b[aKeys[i]]) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
 const childrenToStringToBuffer = (
   children: Child[],
-  buffer: StringBuffer,
+  buffer: string[],
 ): void => {
   for (let i = 0, len = children.length; i < len; i++) {
     const child = children[i];
@@ -171,7 +158,9 @@ const childrenToStringToBuffer = (
   }
 };
 
-export class JSXNode implements HtmlEscaped {
+export type FC<T = Props> = (props: T) => JSX.Element | null;
+
+export class JSXNode   {
   tag: string | CallableFunction;
   props: Props;
   children: Child[];
@@ -183,12 +172,12 @@ export class JSXNode implements HtmlEscaped {
   }
 
   toString(): string {
-    const buffer: StringBuffer = [""];
+    const buffer: string[] = [""];
     this.toStringToBuffer(buffer);
     return buffer[0];
   }
 
-  toStringToBuffer(buffer: StringBuffer): void {
+  toStringToBuffer(buffer: string[]): void {
     const tag = this.tag as string;
     const props = this.props;
     let { children } = this;
@@ -218,7 +207,8 @@ export class JSXNode implements HtmlEscaped {
           throw "Can only set one of `children` or `props.dangerouslySetInnerHTML`.";
         }
 
-        const escapedString = new String(v.__html) as HtmlEscapedString;
+        // deno-lint-ignore no-explicit-any
+        const escapedString = new String(v.__html)  as any;
         escapedString.isEscaped = true;
         children = [escapedString];
       } else {
@@ -241,7 +231,7 @@ export class JSXNode implements HtmlEscaped {
 }
 
 class JSXFunctionNode extends JSXNode {
-  toStringToBuffer(buffer: StringBuffer): void {
+  toStringToBuffer(buffer: string[]): void {
     const { children } = this;
 
     // deno-lint-ignore ban-types
@@ -252,7 +242,7 @@ class JSXFunctionNode extends JSXNode {
 
     if (res instanceof JSXNode) {
       res.toStringToBuffer(buffer);
-    } else if (typeof res === "number" || (res as HtmlEscaped).isEscaped) {
+    } else if (typeof res === "number" || res.isEscaped) {
       buffer[0] += res;
     } else {
       escapeToBuffer(res, buffer);
@@ -261,7 +251,7 @@ class JSXFunctionNode extends JSXNode {
 }
 
 class JSXFragmentNode extends JSXNode {
-  toStringToBuffer(buffer: StringBuffer): void {
+  toStringToBuffer(buffer: string[]): void {
     childrenToStringToBuffer(this.children, buffer);
   }
 }
@@ -269,8 +259,8 @@ class JSXFragmentNode extends JSXNode {
 export const h = (
   tag: string | CallableFunction,
   props: Props,
-  ...children: (string | HtmlEscapedString)[]
-): JSXNode => {
+  ...children: Child[]
+): JSX.Element => {
   if (typeof tag === "function") {
     return new JSXFunctionNode(tag, props, children);
   } else {
@@ -278,26 +268,6 @@ export const h = (
   }
 };
 
-export type FC<T = Props> = (props: T) => HtmlEscapedString;
-
 export const Fragment = (
   props: { key?: string; children?: Child[] },
-): JSXNode => {
-  return new JSXFragmentNode("", {}, props.children || []);
-};
-
-export const memo = <T>(
-  component: FC<T>,
-  propsAreEqual: (prevProps: Readonly<T>, nextProps: Readonly<T>) => boolean =
-    shallowEqual,
-): FC<T> => {
-  let computed = undefined;
-  let prevProps: T | undefined = undefined;
-  return ((props: T): HtmlEscapedString => {
-    if (prevProps && !propsAreEqual(prevProps, props)) {
-      computed = undefined;
-    }
-    prevProps = props;
-    return (computed ||= component(props));
-  }) as FC<T>;
-};
+): JSX.Element => new JSXFragmentNode("", {}, props.children || []);

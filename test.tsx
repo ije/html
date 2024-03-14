@@ -68,6 +68,18 @@ Deno.test("with options", async () => {
   );
 });
 
+Deno.test("using component", async () => {
+  const App = ({ title }: { title: string }) => (
+    <h1>Hello</h1>
+  );
+  const res = await html(<App title="Hello" />);
+  assertEquals(res.headers.get("content-type"), "text/html; charset=utf-8");
+  assertEquals(
+    await res.text(),
+    `<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"></head><body><h1>Hello</h1></body></html>`,
+  );
+})
+
 Deno.test("with plugin", async () => {
   const plugin: Plugin & { disabled?: boolean } = (ctx) => {
     if (plugin.disabled) return;
