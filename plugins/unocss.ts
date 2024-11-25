@@ -1,5 +1,5 @@
 import type { Preset, UserConfig } from "https://esm.sh/@unocss/core@0.58.5";
-import { UnoGenerator } from "https://esm.sh/@unocss/core@0.58.5";
+import { createGenerator } from "https://esm.sh/@unocss/core@0.58.5";
 import presetWind from "https://esm.sh/@unocss/preset-wind@0.58.5?bundle&no-dts";
 import type { Plugin } from "../html.tsx";
 
@@ -13,7 +13,7 @@ const defaultUnoConfig: UserConfig = {
 };
 
 export default function UnoCSS(config = defaultUnoConfig): Plugin {
-  const uno = new UnoGenerator(config);
+  const unoPromise = createGenerator(config);
   return async (ctx) => {
     let input = ctx.body;
     if (ctx.classes?.html) {
@@ -22,6 +22,7 @@ export default function UnoCSS(config = defaultUnoConfig): Plugin {
     if (ctx.classes?.body) {
       input += `<body class="${ctx.classes.body.join(" ")}">`;
     }
+    const uno = await unoPromise
     const { css } = await uno.generate(input);
     ctx.styles.push(unoResetCSS, css)
   };
