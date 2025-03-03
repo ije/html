@@ -8,7 +8,7 @@ To use **Html**, create a `server.tsx` file like this:
 
 ```tsx
 /** @jsx h */
-import html, { h } from "https://deno.land/x/htm@0.2.2/mod.ts";
+import html, { h } from "jsr:@ije/html";
 
 Deno.serve((_req) =>
   html({
@@ -51,7 +51,7 @@ https://dash.deno.com/playground/hello-world-jsx
 rendering process and modify the context.
 
 ```ts
-import html from "https://deno.land/x/htm@0.2.2/mod.ts";
+import html from "jsr:@ije/html";
 
 // add a script to the context
 html.use((ctx) => {
@@ -64,8 +64,8 @@ use the **Unocss** plugin:
 
 ```tsx
 /** @jsx h */
-import html from "https://deno.land/x/htm@0.2.2/mod.ts";
-import UnoCSS from "https://deno.land/x/htm@0.2.2/plugins/unocss.ts";
+import html from "jsr:@ije/html";
+import UnoCSS from "jsr:@ije/html/plugins/unocss";
 
 // with default tailwind preset
 html.use(UnoCSS());
@@ -85,8 +85,8 @@ Use the **ColorScheme** plugin:
 
 ```tsx
 /** @jsx h */
-import html, { h } from "https://deno.land/x/htm@0.2.2/mod.ts";
-import ColorScheme from "https://deno.land/x/htm@0.2.2/plugins/color-scheme.ts";
+import html, { h } from "jsr:@ije/html";
+import ColorScheme from "jsr:@ije/html/plugins/color-scheme";
 
 // check the color scheme with system settings automatically
 html.use(ColorScheme("auto"));

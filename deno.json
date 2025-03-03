@@ -1,0 +1,15 @@
+{
+  "name": "@ije/html",
+  "version": "0.3.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./plugins/unocss": "./plugins/unocss.ts",
+    "./plugins/color-scheme": "./plugins/color-scheme.ts"
+  },
+  "lint": {
+    "include": [
+      "**/*.ts",
+      "**/*.tsx"
+    ]
+  }
+}

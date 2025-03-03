@@ -14,7 +14,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTAB ILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
@@ -91,7 +91,6 @@ const booleanAttributes = [
   "selected",
 ];
 
-
 const escapeRegexp = /[&<>"]/;
 
 // The `escapeToBuffer` implementation is based on code from the MIT licensed `react-dom` package.
@@ -147,8 +146,8 @@ const childrenToStringToBuffer = (
     } else if (child instanceof JSXNode) {
       child.toStringToBuffer(buffer);
     } else if (
-      typeof child === "number" ||
-      (child as unknown as { isEscaped: boolean }).isEscaped
+      typeof child === "number"
+      || (child as unknown as { isEscaped: boolean }).isEscaped
     ) {
       buffer[0] += child;
     } else {
@@ -160,7 +159,7 @@ const childrenToStringToBuffer = (
 
 export type FC<T = Props> = (props: T) => JSX.Element | null;
 
-export class JSXNode   {
+export class JSXNode {
   tag: string | CallableFunction;
   props: Props;
   children: Child[];
@@ -208,7 +207,7 @@ export class JSXNode   {
         }
 
         // deno-lint-ignore no-explicit-any
-        const escapedString = new String(v.__html)  as any;
+        const escapedString = new String(v.__html) as any;
         escapedString.isEscaped = true;
         children = [escapedString];
       } else {
@@ -231,7 +230,7 @@ export class JSXNode   {
 }
 
 class JSXFunctionNode extends JSXNode {
-  toStringToBuffer(buffer: string[]): void {
+  override toStringToBuffer(buffer: string[]): void {
     const { children } = this;
 
     // deno-lint-ignore ban-types
@@ -251,7 +250,7 @@ class JSXFunctionNode extends JSXNode {
 }
 
 class JSXFragmentNode extends JSXNode {
-  toStringToBuffer(buffer: string[]): void {
+  override toStringToBuffer(buffer: string[]): void {
     childrenToStringToBuffer(this.children, buffer);
   }
 }

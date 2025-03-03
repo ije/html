@@ -1,6 +1,6 @@
-/**  @jsx h  */
+/** @jsx h  */
 import html, { h, type Plugin } from "./mod.ts";
-import { assertEquals } from "https://deno.land/std@0.217.0/assert/mod.ts";
+import { assertEquals } from "jsr:@std/assert";
 
 Deno.test("without options", async () => {
   const res = await html(<h1>Hello</h1>);
@@ -69,16 +69,14 @@ Deno.test("with options", async () => {
 });
 
 Deno.test("using component", async () => {
-  const App = ({ title }: { title: string }) => (
-    <h1>Hello</h1>
-  );
+  const App = ({ title }: { title: string }) => <h1>{title}</h1>;
   const res = await html(<App title="Hello" />);
   assertEquals(res.headers.get("content-type"), "text/html; charset=utf-8");
   assertEquals(
     await res.text(),
     `<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"></head><body><h1>Hello</h1></body></html>`,
   );
-})
+});
 
 Deno.test("with plugin", async () => {
   const plugin: Plugin & { disabled?: boolean } = (ctx) => {
